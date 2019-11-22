@@ -4,38 +4,18 @@ import { Link } from 'react-router-dom';
 
 import WorkoutImage from '../components/WorkoutImage';
 
-type Item = {
-  src: string;
-  text: string;
-  url: '/'
-};
+import { Item } from '../declarations';
 
-const workoutItems: Item[] = [
-  { 
-    src: 'https://imgix.bustle.com/elite-daily/2016/03/06140813/elite-daily-Suprijono-Suharjoto-workout.jpg?w=1020&h=574&fit=crop&crop=faces&auto=format&q=70', 
-    text: 'Back Strength',
-    url: '/'
-  },
-  { 
-    src: 'https://www.cheatsheet.com/wp-content/uploads/2016/09/Cute-fit-girl-doing-physical-exercises-at-gym.jpg', 
-    text: 'Core Workout',
-    url: '/'
-  },
-  {
-    src: 'https://myfitnessgear.co.uk/wp-content/uploads/2018/07/cant-feel-my-abs-working-when-doing-sit-ups-5.png', 
-    text: 'All Abs',
-    url: '/'
-  }
 
-];
+//import dummy data
+import workoutItems from '../data/workoutItems';
 
 const ListItems = () => {
  
-
-  const items = workoutItems.map(item => {
+  const items = workoutItems.map((item, index) => {
     return (
-      <IonItem key={item.text}>
-       <Link to='/'>
+      <IonItem key={item.id}>
+       <Link to={`/home/workouts/${item.id}`}>
           <WorkoutImage src={item.src} text={item.text} />
         </Link>      
       </IonItem>

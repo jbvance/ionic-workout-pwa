@@ -3,3 +3,10 @@ export interface AppPage {
   icon: object;
   title: string;
 }
+
+export type Item = {
+  id: number;
+  src: string;
+  text: string;
+  url: '/'
+};
