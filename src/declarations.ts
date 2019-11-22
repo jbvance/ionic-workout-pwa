@@ -4,9 +4,8 @@ export interface AppPage {
   title: string;
 }
 
-export type Item = {
+export type WorkoutItem = {
   id: number;
-  src: string;
-  text: string;
-  url: '/'
+  imgSrc: string;
+  text: string;  
 };

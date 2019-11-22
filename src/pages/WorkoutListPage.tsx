@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import WorkoutImage from '../components/WorkoutImage';
 
-import { Item } from '../declarations';
+import { WorkoutItem } from '../declarations';
 
 
 //import dummy data
@@ -16,7 +16,7 @@ const ListItems = () => {
     return (
       <IonItem key={item.id}>
        <Link to={`/home/workouts/${item.id}`}>
-          <WorkoutImage src={item.src} text={item.text} />
+          <WorkoutImage src={item.imgSrc} text={item.text} />
         </Link>      
       </IonItem>
     );
