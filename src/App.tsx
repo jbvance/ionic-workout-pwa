@@ -54,7 +54,7 @@ const App: React.FC = () => (
       <IonSplitPane contentId="main">
         <Menu appPages={appPages} />
         <IonRouterOutlet id="main">
-          <Route path="/home" component={Home} exact={true} />
+          <Route path="/home" component={WorkoutListPage} exact={true} />
           <Route path="/home/list" component={List} exact={true} />
           <Route path="/home/workouts" component={WorkoutListPage} exact={true} />
           <Route path="/home/workouts/:id" component={WorkoutStartPage} />
