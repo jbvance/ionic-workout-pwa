@@ -49,7 +49,7 @@ const WorkoutStartPage: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol>
-               <IonImg src={workout.imgSrc} />
+               <IonImg  src={workout.imgSrc} />
             </IonCol>
           </IonRow>
           <IonRow>
@@ -87,12 +87,12 @@ const WorkoutStartPage: React.FC = () => {
           <IonRow>
             <IonCol>   
               <div style={{textAlign: 'left', fontSize: 70, color: 'black' }} onClick={decreaseDuration}> 
-                <IonIcon slot="start" color="medium" icon={removeCircleOutline} />
+                <IonIcon slot="start" color={duration === 5 ? 'medium' : ''} icon={removeCircleOutline} />
               </div>                                      
             </IonCol>
             <IonCol>
               <div style={{textAlign: 'right', fontSize: 70, color: 'black' }} onClick={increaseDuration}>
-                 <IonIcon slot="start" color="medium" icon={addCircleOutline} />
+                 <IonIcon slot="start" color={duration === 60 ? 'medium' : ''} icon={addCircleOutline} />
               </div>
             </IonCol>
           </IonRow>
