@@ -8,7 +8,7 @@ import Menu from './components/Menu';
 import Home from './pages/Home';
 import List from './pages/List';
 import WorkoutListPage from './pages/WorkoutListPage';
-import { home, list } from 'ionicons/icons';
+import { home, list, fitness } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -43,7 +43,7 @@ const appPages: AppPage[] = [
   {
     title: 'Workouts',
     url: '/home/workouts',
-    icon: list
+    icon: fitness
   }
 ];
 
