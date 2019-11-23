@@ -49,7 +49,7 @@ const WorkoutStartPage: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol>
-               <IonImg  src={workout.imgSrc} />
+               {/* <IonImg  src={workout.imgSrc} /> */}
             </IonCol>
           </IonRow>
           <IonRow>
