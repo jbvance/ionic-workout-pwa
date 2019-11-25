@@ -28,13 +28,26 @@ const WorkoutPage: React.FC = (props) => {
     const ex = workoutList.find(item => item.id.toString() === id);
     setWorkout(ex);
   }, []);
+  if (!workout) return(
+    <IonPage>
+    <IonHeader>
+      <IonToolbar>
+        <IonButtons slot="start">           
+        </IonButtons>
+        <IonTitle>No workout Selected</IonTitle>
+      </IonToolbar>
+    </IonHeader>
+
+    <IonContent></IonContent>
+  </IonPage>
+  )
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">           
           </IonButtons>
-          <IonTitle>Workouts</IonTitle>
+          <IonTitle>{workout.text}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
