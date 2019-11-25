@@ -7,15 +7,19 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  IonText
- // IonGrid,
-  //IonRow,
- // IonCol
+  IonText,
+  IonGrid,
+  IonRow,
+  IonCol
 } from '@ionic/react';
 import { play, pause, rewind, fastforward } from 'ionicons/icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Countdown, { zeroPad } from 'react-countdown-now';
+import {
+  CircularProgressbarWithChildren,
+  buildStyles
+} from 'react-circular-progressbar';
 
 import './WorkoutPage.css';
 
@@ -36,6 +40,16 @@ const renderer = ({hours, minutes, seconds, completed, api }: { hours: number, m
     return <span>{(minutes)}:{zeroPad(seconds)}</span>;
   }
 };
+
+const ProgressContainer = (props: any) => {
+  return (
+    <div style={{}}>      
+      <div style={{ marginTop: 5, display: "flex", justifyContent: "center" }}>
+        <div style={{ width: "50%", paddingRight: 30 }}>{props.children}</div>       
+      </div>
+    </div>
+  );
+}
 
 const WorkoutPage: React.FC = (props) => { 
 
@@ -62,7 +76,7 @@ const WorkoutPage: React.FC = (props) => {
       setWorkout(ex); 
       if (ex) {
         setExercises(ex.exercises);
-        setCurrentExercise(ex.exercises[0]);
+        setCurrentExercise({...ex.exercises[0], timeRemaining: 30});
          console.log("EXERCISES", ex.exercises);
       }
    
@@ -100,32 +114,73 @@ const WorkoutPage: React.FC = (props) => {
           </IonTitle>
          {/* <IonTitle className="countdown-title">{duration}</IonTitle> */}
         </IonToolbar>       
-      </IonHeader>      
-        
-      <div className="ion-text-center">
-        <IonText color="primary">
-           <h1>{currentExercise.text}</h1>       
-        </IonText>
-       
-      </div>
-     
-       <IonContent>     
-           <IonImg src={currentExercise.imgSrc || ''} />
-        </IonContent> 
+      </IonHeader>    
+      
       <IonContent>
-        <h1 className="exercise-title">TEST</h1>
+        <IonGrid>
+          <IonRow>
+            <IonCol>
+               <IonText className="ion-text-center" color="primary">
+                 <h1>{currentExercise.text}</h1>       
+              </IonText>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+             <IonImg src={currentExercise.imgSrc || ''} />
+          </IonRow>
+          <IonRow>
+            <IonCol align-self-center>
+              <ProgressContainer>
+              <CircularProgressbarWithChildren
+                value={currentExercise.timeRemaining / 30 * 100 }
+                styles={buildStyles({
+                  // Rotation of path and trail, in number of turns (0-1)
+                  //rotation: 0.25,
+
+                  // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                  strokeLinecap: 'butt',
+
+                  // How long animation takes to go from one percentage to another, in seconds
+                  pathTransitionDuration: 0.5,
+
+                  // Can specify path transition in more detail, or remove it entirely
+                  // pathTransition: 'none',
+
+                  // Colors
+                  pathColor: `rgba(62, 152, 199)`,
+                  textColor: '#f88',
+                  trailColor: '#d6d6d6',
+                  backgroundColor: '#3e98c7'                                  
+                })}
+         
+               >
+                  <div style={{fontSize: "32px"}}>{currentExercise.timeRemaining}</div>         
+               </CircularProgressbarWithChildren>   
+              </ProgressContainer>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+               <div className="controls-container">
+                  <div>
+                    <IonIcon icon={rewind} size="large"></IonIcon>
+                  </div>
+                   <div>
+                    <IonIcon icon={nowPlaying ? pause : play} onClick={() => playOrPause(countdownRef)} size="large"></IonIcon>
+                  </div>
+                   <div>
+                    <IonIcon icon={fastforward} size="large"></IonIcon>
+                  </div>
+                </div>     
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
-        <div className="controls-container">
-          <div>
-            <IonIcon icon={rewind} size="large"></IonIcon>
-          </div>
-           <div>
-            <IonIcon icon={nowPlaying ? pause : play} onClick={() => playOrPause(countdownRef)} size="large"></IonIcon>
-          </div>
-           <div>
-            <IonIcon icon={fastforward} size="large"></IonIcon>
-          </div>
-        </div>        
+           
+     
+        
+ 
+          
         
     </IonPage>
   );
