@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import List from './pages/List';
 import WorkoutListPage from './pages/WorkoutListPage';
 import WorkoutStartPage from './pages/WorkoutStartPage';
+import WorkoutPage from './pages/WorkoutPage';
 import { home, list, fitness } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
@@ -56,9 +57,14 @@ const App: React.FC = () => (
         <IonRouterOutlet id="main">
           <Route path="/home" component={WorkoutListPage} exact={true} />
           <Route path="/home/list" component={List} exact={true} />
-          <Route path="/home/workouts" component={WorkoutListPage} exact={true} />
-          <Route path="/home/workouts/:id" component={WorkoutStartPage} />
-          <Route path="/" render={() => <Redirect to="/home" exact={true} /> } />
+          <Route
+            path="/home/workouts"
+            component={WorkoutListPage}
+            exact={true}
+          />
+          <Route path="/home/workouts/:id" component={WorkoutStartPage} exact={true} />
+          <Route path="/home/workouts/:id/go" component={WorkoutPage} exact={true} />
+          <Route path="/" render={() => <Redirect to="/home" exact={true} />} />
         </IonRouterOutlet>
       </IonSplitPane>
     </IonReactRouter>

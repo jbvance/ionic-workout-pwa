@@ -17,6 +17,7 @@ import {
 } from '@ionic/react';
 import { addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import {
   CircularProgressbarWithChildren,
@@ -50,7 +51,10 @@ const WorkoutStartPage: React.FC = () => {
     return duration > 5 ? setDuration(duration - 5) : setDuration(5);
   };
 
-  return workout ? (
+  if (!workout) {
+    return <div>No Workout</div>;
+  }
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -123,20 +127,20 @@ const WorkoutStartPage: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol size="8" offset="2">
-              <IonButton
-                style={{ textTransform: 'uppercase' }}
-                expand="full"
-                fill="solid"
-              >
-                Begin Workout
-              </IonButton>
+              <Link to={`/home/workouts/${id}/go`}>
+                <IonButton
+                  style={{ textTransform: 'uppercase' }}
+                  expand="full"
+                  fill="solid"
+                >
+                  Begin Workout
+                </IonButton>
+              </Link>
             </IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>
     </IonPage>
-  ) : (
-    <div>No Workout</div>
   );
 };
 
