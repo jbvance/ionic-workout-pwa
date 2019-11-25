@@ -127,7 +127,7 @@ const WorkoutStartPage: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol size="8" offset="2">
-              <Link to={`/home/workouts/${id}/go`}>
+              <Link to={`/home/workouts/${id}/${duration}/go`}>
                 <IonButton
                   style={{ textTransform: 'uppercase' }}
                   expand="full"

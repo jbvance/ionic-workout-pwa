@@ -63,7 +63,7 @@ const App: React.FC = () => (
             exact={true}
           />
           <Route path="/home/workouts/:id" component={WorkoutStartPage} exact={true} />
-          <Route path="/home/workouts/:id/go" component={WorkoutPage} exact={true} />
+          <Route path="/home/workouts/:id/:duration/go" component={WorkoutPage} exact={true} />
           <Route path="/" render={() => <Redirect to="/home" exact={true} />} />
         </IonRouterOutlet>
       </IonSplitPane>

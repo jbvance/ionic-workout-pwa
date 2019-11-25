@@ -1,0 +1,8 @@
+.countdown-title {
+  text-align: center;
+}
+
+.controls-container {
+  display: flex;
+  justify-content: space-around;
+}
