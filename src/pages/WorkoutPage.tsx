@@ -23,7 +23,7 @@ import {
 
 import './WorkoutPage.css';
 
-import { WorkoutItem } from '../declarations';
+import { WorkoutItem, Exercise } from '../declarations';
 
 //import dummy data
 import workoutList from '../data/workoutItems';
@@ -70,18 +70,43 @@ const WorkoutPage: React.FC = (props) => {
     api.isPaused() ? api.start() : api.pause(); 
     setNowPlaying (api.isPaused());   
   }
-
+  
+  const setExercisesForWorkout = (arrExercises: Exercise[]): Exercise[] => {
+    //console.log("ARREXRECISES", arrExercises);
+    const exercisesForWorkout: Exercise[] = [];
+    const numExercises = intDuration / 1000 / 30; // this gives us the number of 30-second intervals        
+    for(let i: number = 0; i < numExercises; i++) {
+      exercisesForWorkout.push(arrExercises[Math.floor(Math.random()*arrExercises.length)]);
+    } 
+    console.log("EXERCISES FOR WORKOUTS", exercisesForWorkout);
+    return exercisesForWorkout;
+  }
+  
+  const onCountdownTick = (e: any) => {
+    //console.log("EVENT", e);
+    if(currentExercise.timeRemaining > 0) {    
+      return setCurrentExercise({...currentExercise, timeRemaining: currentExercise.timeRemaining - 1});
+    }
+       setCurrentExercise({...currentExercise, timeRemaining: 29});  
+  }  
+  
   useEffect(() => {      
       const ex = workoutList.find(item => item.id.toString() === id);   
       setWorkout(ex); 
       if (ex) {
-        setExercises(ex.exercises);
-        setCurrentExercise({...ex.exercises[0], timeRemaining: 30});
-         console.log("EXERCISES", ex.exercises);
+        //setExercises(ex.exercises);
+        setCurrentExercise({...ex.exercises[0], timeRemaining: 29});  
+        setExercises (() => setExercisesForWorkout(ex.exercises));        
       }
    
       setTimerStart(Date.now() + intDuration);    
   }, [id, intDuration]);
+  
+  useEffect(() => {
+    console.log("EXERCISES FUCK", exercises);
+    //setCurrentExercise({...exercises[0], timeRemaining: 30});
+   // console.log("EXERCISES", exercises);
+  }, [exercises])
   
   if (!workout) return(
     <IonPage>
@@ -110,6 +135,7 @@ const WorkoutPage: React.FC = (props) => {
               renderer={renderer}
               ref={countdownRef}
               controlled={false}
+              onTick={onCountdownTick}
             />           
           </IonTitle>
          {/* <IonTitle className="countdown-title">{duration}</IonTitle> */}
