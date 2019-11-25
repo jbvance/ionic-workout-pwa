@@ -7,5 +7,12 @@ export interface AppPage {
 export type WorkoutItem = {
   id: number;
   imgSrc: string;
-  text: string;  
+  text: string; 
+  exercises: Exercise[];
+};
+
+export type Exercise = {
+  id: number;
+  imgSrc: string;
+  text: string;
 };

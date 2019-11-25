@@ -2,21 +2,19 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
-  IonList,
-  IonMenuButton,
+  IonIcon,  
+  IonImg,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonGrid,
-  IonRow,
-  IonCol
+  IonText
+ // IonGrid,
+  //IonRow,
+ // IonCol
 } from '@ionic/react';
 import { play, pause, rewind, fastforward } from 'ionicons/icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import Countdown, { zeroPad } from 'react-countdown-now';
 
 import './WorkoutPage.css';
@@ -43,6 +41,8 @@ const WorkoutPage: React.FC = (props) => {
 
   const countdownRef = useRef(null); 
   const [workout, setWorkout] = useState();
+  const [exercises, setExercises] = useState();
+  const [currentExercise, setCurrentExercise] = useState();
   const [timerStart, setTimerStart] = useState();
   const [nowPlaying, setNowPlaying] = useState(false);  
   const { id } = useParams();
@@ -59,9 +59,15 @@ const WorkoutPage: React.FC = (props) => {
 
   useEffect(() => {      
       const ex = workoutList.find(item => item.id.toString() === id);   
-      setWorkout(ex);     
+      setWorkout(ex); 
+      if (ex) {
+        setExercises(ex.exercises);
+        setCurrentExercise(ex.exercises[0]);
+         console.log("EXERCISES", ex.exercises);
+      }
+   
       setTimerStart(Date.now() + intDuration);    
-  }, []);
+  }, [id, intDuration]);
   
   if (!workout) return(
     <IonPage>
@@ -85,8 +91,7 @@ const WorkoutPage: React.FC = (props) => {
           </IonButtons>
           <IonTitle className="countdown-title">
             <Countdown
-              date={timerStart}
-            
+              date={timerStart}            
               autoStart={false}
               renderer={renderer}
               ref={countdownRef}
@@ -95,19 +100,33 @@ const WorkoutPage: React.FC = (props) => {
           </IonTitle>
          {/* <IonTitle className="countdown-title">{duration}</IonTitle> */}
         </IonToolbar>       
-      </IonHeader>
-      <div className="controls-container">
-        <div>
-          <IonIcon icon={rewind} size="large"></IonIcon>
-        </div>
-         <div>
-          <IonIcon icon={nowPlaying ? pause : play} onClick={() => playOrPause(countdownRef)} size="large"></IonIcon>
-        </div>
-         <div>
-          <IonIcon icon={fastforward} size="large"></IonIcon>
-        </div>
+      </IonHeader>      
+        
+      <div className="ion-text-center">
+        <IonText color="primary">
+           <h1>{currentExercise.text}</h1>       
+        </IonText>
+       
       </div>
-      <IonContent></IonContent>
+     
+       <IonContent>     
+           <IonImg src={currentExercise.imgSrc || ''} />
+        </IonContent> 
+      <IonContent>
+        <h1 className="exercise-title">TEST</h1>
+      </IonContent>
+        <div className="controls-container">
+          <div>
+            <IonIcon icon={rewind} size="large"></IonIcon>
+          </div>
+           <div>
+            <IonIcon icon={nowPlaying ? pause : play} onClick={() => playOrPause(countdownRef)} size="large"></IonIcon>
+          </div>
+           <div>
+            <IonIcon icon={fastforward} size="large"></IonIcon>
+          </div>
+        </div>        
+        
     </IonPage>
   );
 };
