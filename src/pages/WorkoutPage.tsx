@@ -103,7 +103,7 @@ const WorkoutPage: React.FC = (props) => {
   }, [id, intDuration]);
   
   useEffect(() => {
-    console.log("EXERCISES FUCK", exercises);
+    console.log("EXERCISES SUCK", exercises);
     //setCurrentExercise({...exercises[0], timeRemaining: 30});
    // console.log("EXERCISES", exercises);
   }, [exercises])
