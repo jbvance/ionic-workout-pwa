@@ -80,7 +80,7 @@ const WorkoutPage: React.FC = props => {
   const [curExerciseInd, setCurExerciseInd] = useState<number>(0);
   const [timerStart, setTimerStart] = useState();
   const [nowPlaying, setNowPlaying] = useState(false);
-  const [showAlert1, setShowAlert1] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   let history = useHistory();
   const { id } = useParams();
   const { duration } = useParams();
@@ -168,17 +168,17 @@ const WorkoutPage: React.FC = props => {
   return (
     <IonPage>
       <IonAlert
-        isOpen={showAlert1}
-        onDidDismiss={() => setShowAlert1(false)}
+        isOpen={showAlert}
+        onDidDismiss={() => setShowAlert(false)}
         header={'Are you sure you want to end your workout?'}
-        message={'Message <strong>text</strong>!!!'}
+        //message={'Message <strong>text</strong>!!!'}
         buttons={[
           {
             text: 'No, keep going!',
             role: 'cancel',
             cssClass: 'secondary',
             handler: () => {
-              console.log('Confirm Cancel: blah');
+              console.log('Confirm Cancel');
             }
           },
           {
@@ -193,7 +193,7 @@ const WorkoutPage: React.FC = props => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => setShowAlert1(true)} expand="block">
+            <IonButton onClick={() => setShowAlert(true)} expand="block">
               End
             </IonButton>
           </IonButtons>

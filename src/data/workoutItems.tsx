@@ -32,6 +32,21 @@ const workoutItems: WorkoutItem[] = [
         id: 2,
         imgSrc: 'https://i.pinimg.com/originals/d8/76/16/d87616d4b21e886f009b24fe66db69d6.gif',
         text: 'Bicycle Crunches'
+      },
+      {
+        id: 3,
+        imgSrc: 'https://sporteluxe.com/wp-content/uploads/2017/12/plank-jacks.gif',
+        text: 'Plank Jacks'
+      },
+      {
+        id: 4,
+        imgSrc: 'https://i.imgur.com/eotOxLd.gif',
+        text: 'Flutter Kicks'
+      },
+      {
+        id: 5,
+        imgSrc: 'https://i.imgur.com/OrUga8Z.gif',
+        text: 'Plank'
       }
     ]
   },
