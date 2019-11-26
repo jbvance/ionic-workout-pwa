@@ -84,7 +84,7 @@ const WorkoutPage: React.FC = (props) => {
   
   const onCountdownTick = (e: any) => {
     //console.log("EVENT", e);
-    if(currentExercise.timeRemaining > 0) {    
+    if(currentExercise.timeRemaining > 1) {    
       return setCurrentExercise({...currentExercise, timeRemaining: currentExercise.timeRemaining - 1});
     }   
        const updatedExercises = [...exercises];
