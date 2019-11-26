@@ -55,7 +55,7 @@ const WorkoutPage: React.FC = (props) => {
 
   const countdownRef = useRef(null); 
   const [workout, setWorkout] = useState();
-  const [exercises, setExercises] = useState();
+  const [exercises, setExercises] = useState<Exercise[]>([{id: 1, imgSrc: 'sldkfj', text: 'sdlfkjsd'}]);
   const [currentExercise, setCurrentExercise] = useState();
   const [timerStart, setTimerStart] = useState();
   const [nowPlaying, setNowPlaying] = useState(false);  
@@ -86,8 +86,12 @@ const WorkoutPage: React.FC = (props) => {
     //console.log("EVENT", e);
     if(currentExercise.timeRemaining > 0) {    
       return setCurrentExercise({...currentExercise, timeRemaining: currentExercise.timeRemaining - 1});
-    }
-       setCurrentExercise({...currentExercise, timeRemaining: 29});  
+    }   
+       const updatedExercises = [...exercises];
+       if (updatedExercises.length) {
+         updatedExercises.shift();
+         setExercises(updatedExercises);  
+       }             
   }  
   
   useEffect(() => {      
@@ -103,9 +107,9 @@ const WorkoutPage: React.FC = (props) => {
   }, [id, intDuration]);
   
   useEffect(() => {
-    console.log("EXERCISES SUCK", exercises);
-    //setCurrentExercise({...exercises[0], timeRemaining: 30});
-   // console.log("EXERCISES", exercises);
+    if (!exercises.length) return;
+    console.log("EXERCISES", exercises);
+    setCurrentExercise({...exercises[0], timeRemaining: 30});  
   }, [exercises])
   
   if (!workout) return(
