@@ -1,4 +1,6 @@
 import {
+  IonAlert,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -14,7 +16,7 @@ import {
 } from '@ionic/react';
 import { play, pause, rewind, fastforward } from 'ionicons/icons';
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import Countdown, { zeroPad } from 'react-countdown-now';
 import {
   CircularProgressbarWithChildren,
@@ -44,6 +46,9 @@ const renderer = ({
   completed: boolean;
   api: any;
 }) => {
+  if (api.isPaused()) {
+      return <div>Paused</div>
+  }
   if (completed) {
     // Render a completed state
     return <Completionist />;
@@ -70,18 +75,16 @@ const ProgressContainer = (props: any) => {
 const WorkoutPage: React.FC = props => {
   const countdownRef = useRef(null);
   const [workout, setWorkout] = useState();
-  const [exercises, setExercises] = useState<Exercise[]>([
-    { id: 1, imgSrc: 'sldkfj', text: 'sdlfkjsd' }
-  ]);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [currentExercise, setCurrentExercise] = useState();
   const [curExerciseInd, setCurExerciseInd] = useState<number>(0);
   const [timerStart, setTimerStart] = useState();
   const [nowPlaying, setNowPlaying] = useState(false);
+  const [showAlert1, setShowAlert1] = useState(false);
+  let history = useHistory();
   const { id } = useParams();
   const { duration } = useParams();
-  const intDuration: number = duration ? parseInt(duration) * 60 * 1000 : 0;
-
-  // Set the date/time for the countdown
+  const intDuration: number = duration ? parseInt(duration) * 60 * 1000 : 0;  
 
   const playOrPause = (cdRef: any) => {
     const { api } = cdRef.current;
@@ -89,7 +92,7 @@ const WorkoutPage: React.FC = props => {
     setNowPlaying(api.isPaused());
   };
 
-  const setExercisesForWorkout = (arrExercises: Exercise[]): Exercise[] => {   
+  const setExercisesForWorkout = (arrExercises: Exercise[]): Exercise[] => {
     const exercisesForWorkout: Exercise[] = [];
     const numExercises = intDuration / 1000 / 30; // this gives us the number of 30-second intervals
     for (let i: number = 0; i < numExercises; i++) {
@@ -110,15 +113,15 @@ const WorkoutPage: React.FC = props => {
       });
     }
     // time is expring, update exercise
-    setCurExerciseInd(curExerciseInd + 1);    
+    setCurExerciseInd(curExerciseInd + 1);
   };
 
   const changeExercise = (increment: number): void => {
     //console.log("CURRENT EXERCISE INDEX", curExerciseInd);
     setCurExerciseInd(curExerciseInd + increment);
-  }
+  };
 
-  useEffect(() => {
+  useEffect(() => {      
     const ex = workoutList.find(item => item.id.toString() === id);
     setWorkout(ex);
     if (ex) {
@@ -130,21 +133,21 @@ const WorkoutPage: React.FC = props => {
     setTimerStart(Date.now() + intDuration);
   }, [id, intDuration]);
 
-  useEffect(() => {
-    if (!exercises.length) return;    
+  useEffect(() => {    
+    if (!exercises.length) return;
     setCurrentExercise({ ...exercises[0], timeRemaining: 30 });
   }, [exercises]);
 
   useEffect(() => {
     let newIndex = 0;
     if (curExerciseInd < 0) {
-      newIndex =  exercises.length - ((curExerciseInd % exercises.length) * -1);
+      newIndex = exercises.length - (curExerciseInd % exercises.length) * -1;
       if (newIndex === exercises.length) newIndex = 0;
-    } else if (curExerciseInd >= exercises.length) {      
+    } else if (curExerciseInd >= exercises.length) {
       newIndex = curExerciseInd % exercises.length;
     } else {
       newIndex = curExerciseInd;
-    }   
+    }
     setCurrentExercise({ ...exercises[newIndex], timeRemaining: 30 });
   }, [curExerciseInd]);
 
@@ -164,9 +167,36 @@ const WorkoutPage: React.FC = props => {
 
   return (
     <IonPage>
+      <IonAlert
+        isOpen={showAlert1}
+        onDidDismiss={() => setShowAlert1(false)}
+        header={'Are you sure you want to end your workout?'}
+        message={'Message <strong>text</strong>!!!'}
+        buttons={[
+          {
+            text: 'No, keep going!',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Confirm Cancel: blah');
+            }
+          },
+          {
+            text: `Yes, I'm done`,
+            handler: () => {
+              console.log('Confirm Okay');              
+              history.push('/');
+            }
+          }
+        ]}
+      />
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start"></IonButtons>
+          <IonButtons slot="start">
+            <IonButton onClick={() => setShowAlert1(true)} expand="block">
+              End
+            </IonButton>
+          </IonButtons>
           <IonTitle className="countdown-title">
             <Countdown
               date={timerStart}
@@ -229,7 +259,11 @@ const WorkoutPage: React.FC = props => {
             <IonCol>
               <div className="controls-container">
                 <div>
-                  <IonIcon icon={rewind} onClick={() => changeExercise(-1)}size="large"></IonIcon>
+                  <IonIcon
+                    icon={rewind}
+                    onClick={() => changeExercise(-1)}
+                    size="large"
+                  ></IonIcon>
                 </div>
                 <div>
                   <IonIcon
@@ -239,7 +273,11 @@ const WorkoutPage: React.FC = props => {
                   ></IonIcon>
                 </div>
                 <div>
-                  <IonIcon icon={fastforward} onClick={() => changeExercise(1)} size="large"></IonIcon>
+                  <IonIcon
+                    icon={fastforward}
+                    onClick={() => changeExercise(1)}
+                    size="large"
+                  ></IonIcon>
                 </div>
               </div>
             </IonCol>
