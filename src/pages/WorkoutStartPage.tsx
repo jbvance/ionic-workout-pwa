@@ -24,6 +24,9 @@ import {
   buildStyles
 } from 'react-circular-progressbar';
 
+// import styles
+import './WorkoutStartPage.css';
+
 //import dummy data
 import workoutList from '../data/workoutItems';
 
@@ -66,7 +69,7 @@ const WorkoutStartPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        <IonGrid>
+        <IonGrid className="workout-start-grid">
           <IonRow>
             <IonCol>{/* <IonImg  src={workout.imgSrc} /> */}</IonCol>
           </IonRow>
