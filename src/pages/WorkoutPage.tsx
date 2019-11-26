@@ -23,6 +23,7 @@ import {
   buildStyles
 } from 'react-circular-progressbar';
 
+
 import './WorkoutPage.css';
 
 import { WorkoutItem, Exercise } from '../declarations';

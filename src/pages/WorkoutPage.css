@@ -1,5 +1,6 @@
 .countdown-title {
   text-align: center;
+  border-bottom: 3px solid gray;
 }
 
 .exercise-title {
@@ -15,7 +16,12 @@
 
 .controls-container {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 30px;
+  justify-content: space-around;  
+  border-top: 1px solid gray;  
+ 
+}
+
+.controls-container div {
+  margin-top: 10px; 
 }
 
