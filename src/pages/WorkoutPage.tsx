@@ -147,7 +147,7 @@ const WorkoutPage: React.FC = (props) => {
       </IonHeader>    
       
       <IonContent>
-        <IonGrid>
+        <IonGrid className="workout-grid">
           <IonRow>
             <IonCol>
                <IonText className="ion-text-center" color="primary">

@@ -6,7 +6,15 @@
   align-text: center;
 }
 
+.workout-grid {  
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .controls-container {
   display: flex;
   justify-content: space-around;
 }
+
