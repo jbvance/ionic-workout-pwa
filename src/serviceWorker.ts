@@ -1,3 +1,5 @@
+import { prototype } from "events";
+
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -9,6 +11,9 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
+
+// store prompt for install of pwa
+let deferredPrompt: any;
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -58,6 +63,22 @@ export function register(config?: Config) {
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
+    });
+
+    window.addEventListener('beforeinstallprompt', (event: any) => {
+      console.log('beforeinstallprompt called', event);
+      deferredPrompt = event;
+      //event.preventDefault();
+      //event.prompt();
+
+      // event.userChoice.then((choiceResult: any) => {
+      //   console.log(choiceResult.outcome);
+      //   if (choiceResult.outcome === 'dismissed') {
+      //     console.log('User cancelled installation');
+      //   } else {
+      //     console.log('User added to homescreen');
+      //   }
+      // })
     });
   }
 }
