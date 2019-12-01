@@ -87,6 +87,10 @@ const WorkoutPage: React.FC = props => {
   const { duration } = useParams();
   const intDuration: number = duration ? parseInt(duration) * 60 * 1000 : 0;  
 
+  let audioRefCountdown3: HTMLAudioElement | null;
+  let audioRefCountdown2: HTMLAudioElement | null;
+  let audioRefCountdown1: HTMLAudioElement | null;
+
   const playOrPause = (cdRef: any) => {
     const { api } = cdRef.current;
     api.isPaused() ? api.start() : api.pause();
@@ -106,13 +110,22 @@ const WorkoutPage: React.FC = props => {
   };
 
   const onCountdownTick = (e: any) => {
-    //console.log("EVENT", e);
-    if (currentExercise.timeRemaining > 1) {
+    
+    if (currentExercise.timeRemaining > 1) {     
+      if (currentExercise.timeRemaining === 4) {
+        audioRefCountdown3!.play();
+      }
+      else if (currentExercise.timeRemaining === 3) {
+        audioRefCountdown2!.play();
+      }  
+      if (currentExercise.timeRemaining === 2) {
+        audioRefCountdown1!.play();
+      }     
       return setCurrentExercise({
         ...currentExercise,
         timeRemaining: currentExercise.timeRemaining - 1
       });
-    }
+    }   
     // time is expring, update exercise
     setCurExerciseInd(curExerciseInd + 1);
   };
@@ -168,6 +181,10 @@ const WorkoutPage: React.FC = props => {
 
   return (
     <IonPage>
+      <audio ref={(ref) => {audioRefCountdown1 = ref}} src="https://app-images-jv.s3.us-east-2.amazonaws.com/countdown-one.mp3" />
+      <audio ref={(ref) => {audioRefCountdown2 = ref}} src="https://app-images-jv.s3.us-east-2.amazonaws.com/countdown-two.mp3" />
+      <audio ref={(ref) => {audioRefCountdown3 = ref}} src="https://app-images-jv.s3.us-east-2.amazonaws.com/countdown-three.mp3" />
+
       <IonAlert
         isOpen={showAlert}
         onDidDismiss={() => setShowAlert(false)}
