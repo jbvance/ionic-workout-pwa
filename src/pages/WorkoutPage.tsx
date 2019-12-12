@@ -26,8 +26,25 @@ import {
 
 import './WorkoutPage.css';
 
-import { WorkoutItem, Exercise } from '../declarations';
+// GraphQL Imports
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 
+import { Exercise } from '../declarations';
+
+const EXERCISES = gql`
+  query workout ($id: ID!){
+    workout(where: { id: $id }) { 
+        id
+        exercises {
+          id
+          title
+          image
+        }  
+    }
+  
+  }
+`;
 
 const Completionist = () => <span>You are good to go!</span>;
 
@@ -72,9 +89,7 @@ const ProgressContainer = (props: any) => {
 };
 
 const WorkoutPage: React.FC = props => {
-  const countdownRef = useRef(null);
-  const [workoutList, setWorkoutList] = useState();
-  const [workout, setWorkout] = useState();
+  const countdownRef = useRef(null);    
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [currentExercise, setCurrentExercise] = useState();
   const [curExerciseInd, setCurExerciseInd] = useState<number>(0);
@@ -85,6 +100,10 @@ const WorkoutPage: React.FC = props => {
   const { id } = useParams();
   const { duration } = useParams();
   const intDuration: number = duration ? parseInt(duration) * 60 * 1000 : 0;  
+   // Call GraphQL query  
+  const { loading, error, data } = useQuery(EXERCISES, {
+    variables: { id }
+  });
 
   let audioRefCountdown3: HTMLAudioElement | null;
   let audioRefCountdown2: HTMLAudioElement | null;
@@ -103,8 +122,7 @@ const WorkoutPage: React.FC = props => {
       exercisesForWorkout.push(
         arrExercises[Math.floor(Math.random() * arrExercises.length)]
       );
-    }
-    //console.log('EXERCISES FOR WORKOUTS', exercisesForWorkout);
+    }    
     return exercisesForWorkout;
   };
 
@@ -129,27 +147,22 @@ const WorkoutPage: React.FC = props => {
     setCurExerciseInd(curExerciseInd + 1);
   };
 
-  const changeExercise = (increment: number): void => {
-    //console.log("CURRENT EXERCISE INDEX", curExerciseInd);
+  const changeExercise = (increment: number): void => {   
     setCurExerciseInd(curExerciseInd + increment);
   };
+   
 
-  useEffect(() => {      
-    const ex = workoutList.find((item: WorkoutItem) => item.id.toString() === id);
-    setWorkout(ex);
-    if (ex) {
-      //setExercises(ex.exercises);
-      //setCurrentExercise({...ex.exercises[curExerciseInd], timeRemaining: 29});
-      setExercises(() => setExercisesForWorkout(ex.exercises));
-    }
-
+  useEffect(() => {     
     setTimerStart(Date.now() + intDuration);
   }, [id, intDuration]);
 
-  useEffect(() => {    
-    if (!exercises.length) return;
-    setCurrentExercise({ ...exercises[0], timeRemaining: 30 });
-  }, [exercises]);
+  useEffect(() => {   
+    if (!data || !data.workout) {     
+      return;
+    };
+    setExercises(data.workout.exercises);    
+    setCurrentExercise({ ...data.workout.exercises[0], timeRemaining: 30 });   
+  }, [data, exercises]);
 
   useEffect(() => {
     let newIndex = 0;
@@ -163,20 +176,15 @@ const WorkoutPage: React.FC = props => {
     }
     setCurrentExercise({ ...exercises[newIndex], timeRemaining: 30 });
   }, [curExerciseInd]);
-
-  if (!workout)
-    return (
-      <IonPage>
-        <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start"></IonButtons>
-            <IonTitle>No workout Selected</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
-        <IonContent></IonContent>
-      </IonPage>
-    );
+   
+  
+ if (loading || !currentExercise) {    
+    return <IonPage><div>Loading...</div></IonPage>;
+  }
+  if (error) {   
+    console.error(error); 
+    return <IonPage><div>Error: {error.message}</div></IonPage>;
+  }   
 
   return (
     <IonPage>
@@ -187,21 +195,18 @@ const WorkoutPage: React.FC = props => {
       <IonAlert
         isOpen={showAlert}
         onDidDismiss={() => setShowAlert(false)}
-        header={'Are you sure you want to end your workout?'}
-        //message={'Message <strong>text</strong>!!!'}
+        header={'Are you sure you want to end your workout?'}        
         buttons={[
           {
             text: 'No, keep going!',
             role: 'cancel',
             cssClass: 'secondary',
-            handler: () => {
-              console.log('Confirm Cancel');
+            handler: () => {              
             }
           },
           {
             text: `Yes, I'm done`,
-            handler: () => {
-              console.log('Confirm Okay');              
+            handler: () => {                          
               history.push('/');
             }
           }
@@ -233,12 +238,12 @@ const WorkoutPage: React.FC = props => {
           <IonRow>
             <IonCol>
               <IonText className="ion-text-center" color="primary">
-                <h1>{currentExercise.text}</h1>
+                <h1>{currentExercise.title}</h1>
               </IonText>
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonImg src={currentExercise.imgSrc || ''} />
+            <IonImg src={currentExercise.image || ''} />
           </IonRow>
           <IonRow>
             <IonCol align-self-center>

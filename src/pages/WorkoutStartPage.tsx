@@ -53,12 +53,7 @@ const WorkoutStartPage: React.FC = () => {
   const [percentage, setPercentage] = useState(8.33);
   const { id } = useParams() || '';
   const minDuration = 5;
-  const maxDuration = 60;
-
-  useEffect(() => {
-    //const workoutToSet = workoutList.find((item: WorkoutItem) => item.id.toString() === id);
-    //setWorkout(workoutToSet);
-  }, []);
+  const maxDuration = 60;  
 
   useEffect(() => {
     setPercentage((duration / 60) * 100);
