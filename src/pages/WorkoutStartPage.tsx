@@ -24,13 +24,30 @@ import {
   buildStyles
 } from 'react-circular-progressbar';
 
+// GraphQL Imports
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
+// data type declarations
+import { WorkoutItem } from '../declarations';
+
 // import styles
 import './WorkoutStartPage.css';
 
-//import dummy data
-import workoutList from '../data/workoutItems';
+// GraphQL Query
+const WORKOUT = gql`
+  query workout ($id: ID!){
+    workout(where: { id: $id }) {     
+        id
+        title
+        image     
+    }
+  
+  }
+`;
 
-const WorkoutStartPage: React.FC = () => {
+
+const WorkoutStartPage: React.FC = () => {  
   const [workout, setWorkout] = useState();
   const [duration, setDuration] = useState(5);
   const [percentage, setPercentage] = useState(8.33);
@@ -39,8 +56,8 @@ const WorkoutStartPage: React.FC = () => {
   const maxDuration = 60;
 
   useEffect(() => {
-    const ex = workoutList.find(item => item.id.toString() === id);
-    setWorkout(ex);
+    //const workoutToSet = workoutList.find((item: WorkoutItem) => item.id.toString() === id);
+    //setWorkout(workoutToSet);
   }, []);
 
   useEffect(() => {
@@ -53,9 +70,20 @@ const WorkoutStartPage: React.FC = () => {
   const decreaseDuration = () => {
     return duration > 5 ? setDuration(duration - 5) : setDuration(5);
   };
+  // console.log("ID", id);
+  const { loading, error, data } = useQuery(WORKOUT, {
+    variables: { id }
+  });
 
-  if (!workout) {
-    return <div>No Workout</div>;
+ // if we get here, we can set the workout
+ //console.log("WORKOUT", data);
+
+  if (loading) {    
+    return <IonPage><div>Loading...</div></IonPage>;
+  }
+  if (error) {   
+    console.error(error); 
+    return <IonPage><div>Error: {error.message}</div></IonPage>;
   }
   return (
     <IonPage>
@@ -64,7 +92,7 @@ const WorkoutStartPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton />
           </IonButtons>
-          <IonTitle>{workout.text}</IonTitle>
+          <IonTitle>{data.workout.title}</IonTitle>
         </IonToolbar>
       </IonHeader>
 

@@ -5,9 +5,11 @@ import * as serviceWorker from './serviceWorker';
 import ApolloClient from 'apollo-boost';
 import { gql } from "apollo-boost";
 
+console.log("ENDPOINT", process.env.REACT_APP_PRISMA_ENDPOINT)
 // Set up ApolloClient
 const client = new ApolloClient({
-  uri: 'http://port-4444.ionic-workout-jbvance924063.codeanyapp.com',
+  uri: process.env.REACT_APP_PRISMA_ENDPOINT
+  //uri: 'http://port-4444.ionic-workout-jbvance924063.codeanyapp.com',
 });
 
 ReactDOM.render(<App />, document.getElementById('root'));

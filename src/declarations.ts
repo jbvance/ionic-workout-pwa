@@ -6,13 +6,14 @@ export interface AppPage {
 
 export type WorkoutItem = {
   id: number;
-  imgSrc: string;
-  text: string; 
+  title: string;
+  imgage: string;  
   exercises: Exercise[];
 };
 
 export type Exercise = {
   id: number;
-  imgSrc: string;
-  text: string;
+  title: string;
+  description: string
+  image: string;  
 };

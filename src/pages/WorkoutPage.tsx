@@ -28,8 +28,6 @@ import './WorkoutPage.css';
 
 import { WorkoutItem, Exercise } from '../declarations';
 
-//import dummy data
-import workoutList from '../data/workoutItems';
 
 const Completionist = () => <span>You are good to go!</span>;
 
@@ -75,6 +73,7 @@ const ProgressContainer = (props: any) => {
 
 const WorkoutPage: React.FC = props => {
   const countdownRef = useRef(null);
+  const [workoutList, setWorkoutList] = useState();
   const [workout, setWorkout] = useState();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [currentExercise, setCurrentExercise] = useState();
@@ -136,7 +135,7 @@ const WorkoutPage: React.FC = props => {
   };
 
   useEffect(() => {      
-    const ex = workoutList.find(item => item.id.toString() === id);
+    const ex = workoutList.find((item: WorkoutItem) => item.id.toString() === id);
     setWorkout(ex);
     if (ex) {
       //setExercises(ex.exercises);

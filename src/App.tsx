@@ -55,7 +55,7 @@ const appPages: AppPage[] = [
 ];
 
 const client = new ApolloClient({
-  uri: 'http://port-4444.ionic-workout-jbvance924063.codeanyapp.com',
+  uri: process.env.REACT_APP_PRISMA_ENDPOINT,
 });
 
 const App: React.FC = () => {

@@ -8,10 +8,6 @@ import WorkoutImage from '../components/WorkoutImage';
 
 import { WorkoutItem } from '../declarations';
 
-
-//import dummy data
-import workoutItems from '../data/workoutItems';
-
 const EXERCISES = gql`
   {
     workouts 
@@ -23,8 +19,7 @@ const EXERCISES = gql`
   }
 `;
 
-const ListItems = (props: any) => {
-  console.log("PROPS", props);
+const ListItems = (props: any) => {  
  
   const items = props.items.map((item: any) => {
     return (
