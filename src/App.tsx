@@ -4,6 +4,11 @@ import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { AppPage } from './declarations';
 
+/* GraphQL Imports */
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+import { gql } from "apollo-boost";
+
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import List from './pages/List';
@@ -49,26 +54,33 @@ const appPages: AppPage[] = [
   }
 ];
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonSplitPane contentId="main">
-        <Menu appPages={appPages} />
-        <IonRouterOutlet id="main">
-          <Route path="/home" component={WorkoutListPage} exact={true} />
-          <Route path="/home/list" component={List} exact={true} />
-          <Route
-            path="/home/workouts"
-            component={WorkoutListPage}
-            exact={true}
-          />
-          <Route path="/home/workouts/:id" component={WorkoutStartPage} exact={true} />
-          <Route path="/home/workouts/:id/:duration/go" component={WorkoutPage} exact={true} />
-          <Route path="/" render={() => <Redirect to="/home" exact={true} />} />
-        </IonRouterOutlet>
-      </IonSplitPane>
-    </IonReactRouter>
-  </IonApp>
-);
+const client = new ApolloClient({
+  uri: 'http://port-4444.ionic-workout-jbvance924063.codeanyapp.com',
+});
+
+const App: React.FC = () => {
+  return (
+  <ApolloProvider client={client}>
+    <IonApp>
+      <IonReactRouter>
+        <IonSplitPane contentId="main">
+          <Menu appPages={appPages} />
+          <IonRouterOutlet id="main">
+            <Route path="/home" component={WorkoutListPage} exact={true} />
+            <Route path="/home/list" component={List} exact={true} />
+            <Route
+              path="/home/workouts"
+              component={WorkoutListPage}
+              exact={true}
+            />
+            <Route path="/home/workouts/:id" component={WorkoutStartPage} exact={true} />
+            <Route path="/home/workouts/:id/:duration/go" component={WorkoutPage} exact={true} />
+            <Route path="/" render={() => <Redirect to="/home" exact={true} />} />
+          </IonRouterOutlet>
+        </IonSplitPane>
+      </IonReactRouter>
+    </IonApp>
+  </ApolloProvider>
+)};
 
 export default App;
